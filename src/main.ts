@@ -1,8 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import dotenv from 'dotenv';
 import { AppModule } from './app.module';
+import { PrismaService } from './prisma/prisma.service';
 
-async function bootstrap() {
+dotenv.config();
+const PORT = process.env.PORT || 3000;
+
+async function start() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(PORT);
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
 }
-bootstrap();
+
+start();
