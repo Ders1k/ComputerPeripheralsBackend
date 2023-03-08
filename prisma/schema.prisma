@@ -9,12 +9,13 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+  name      String
+  surname   String
   email     String   @unique
+  password  String
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String
-  surname   String
   orders    Order[]
 }
 
