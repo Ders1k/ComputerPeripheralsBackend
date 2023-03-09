@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { DeviceService } from './device.service';
 import { CreateDeviceDto, UpdateDeviceDto } from './dto';
 
@@ -21,8 +22,12 @@ export class DeviceController {
   }
 
   @Get(':id')
-  getOneDevice(@Param('id', ParseIntPipe) id: number) {
-    return this.deviceService.getOneDevice(id);
+  async getOneDevice(@Param('id', ParseIntPipe) id: number) {
+    const device = await this.deviceService.getOneDevice(id);
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
+    return device;
   }
 
   @Post()
@@ -31,15 +36,23 @@ export class DeviceController {
   }
 
   @Patch(':id')
-  updateDevice(
+  async updateDevice(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateDeviceDto,
   ) {
+    const device = await this.deviceService.getOneDevice(id);
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
     return this.deviceService.updateDevice(id, payload);
   }
 
   @Delete(':id')
-  deleteDevice(@Param('id', ParseIntPipe) id: number) {
+  async deleteDevice(@Param('id', ParseIntPipe) id: number) {
+    const device = await this.deviceService.getOneDevice(id);
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
     return this.deviceService.deleteDevice(id);
   }
 }

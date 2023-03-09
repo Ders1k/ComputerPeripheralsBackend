@@ -7,15 +7,17 @@ export class DeviceService {
   constructor(private prisma: PrismaService) {}
 
   async getAllDevices() {
-    return await this.prisma.device.findMany();
+    const devices = await this.prisma.device.findMany();
+    return devices;
   }
 
   async getOneDevice(id: number) {
-    return await this.prisma.device.findUnique({ where: { id } });
+    const device = await this.prisma.device.findUnique({ where: { id } });
+    return device;
   }
 
   async createDevice(payload: CreateDeviceDto) {
-    return await this.prisma.device.create({
+    const newDevice = await this.prisma.device.create({
       data: {
         name: payload.name,
         price: payload.price,
@@ -24,10 +26,11 @@ export class DeviceService {
         brandId: payload.brandId,
       },
     });
+    return newDevice;
   }
 
-  async updateDevice(id: number, payload: UpdateDeviceDto) {
-    return await this.prisma.device.update({
+  async updateDevice(id: number, payload: Partial<UpdateDeviceDto>) {
+    const updatedDevice = await this.prisma.device.update({
       where: { id },
       data: {
         name: payload.name,
@@ -37,9 +40,11 @@ export class DeviceService {
         brandId: payload.brandId,
       },
     });
+    return updatedDevice;
   }
 
   async deleteDevice(id: number) {
-    return await this.prisma.device.delete({ where: { id } });
+    const deletedDevice = await this.prisma.device.delete({ where: { id } });
+    return deletedDevice;
   }
 }

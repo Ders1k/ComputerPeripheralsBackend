@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { BrandService } from './brand.service';
 import { CreateBrandDto, UpdateBrandDto } from './dto';
 
@@ -26,15 +27,23 @@ export class BrandController {
   }
 
   @Patch(':id')
-  updateBrand(
+  async updateBrand(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateBrandDto,
   ) {
+    const brand = await this.brandService.getBrandById(id);
+    if (!brand) {
+      throw new NotFoundException('Brand not found');
+    }
     return this.brandService.updateBrand(id, payload);
   }
 
   @Delete(':id')
-  deleteBrand(@Param('id', ParseIntPipe) id: number) {
+  async deleteBrand(@Param('id', ParseIntPipe) id: number) {
+    const brand = await this.brandService.getBrandById(id);
+    if (!brand) {
+      throw new NotFoundException('Brand not found');
+    }
     return this.brandService.deleteBrand(id);
   }
 }
