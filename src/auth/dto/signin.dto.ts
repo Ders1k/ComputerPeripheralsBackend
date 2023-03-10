@@ -1,17 +1,10 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class UpdateUserDto {
-  @IsNotEmpty()
-  name: string;
-
-  @IsNotEmpty()
-  surname: string;
-
+export class signInDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
   @IsNotEmpty()
   password: string;
-  role?: string;
 }
