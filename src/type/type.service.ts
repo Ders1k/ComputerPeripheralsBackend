@@ -6,33 +6,28 @@ import { CreateTypeDto, UpdateTypeDto } from './dto';
 export class TypeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAllTypes() {
-    const types = await this.prisma.type.findMany();
-    return types;
+  getAllTypes() {
+    return this.prisma.type.findMany();
   }
 
-  async getTypeById(id: number) {
-    const type = await this.prisma.type.findUnique({ where: { id } });
-    return type;
+  getTypeById(id: number) {
+    return this.prisma.type.findUnique({ where: { id } });
   }
 
-  async createType(payload: CreateTypeDto) {
-    const newType = await this.prisma.type.create({
+  createType(payload: CreateTypeDto) {
+    return this.prisma.type.create({
       data: { typeName: payload.typeName },
     });
-    return newType;
   }
 
-  async updateType(id: number, payload: Partial<UpdateTypeDto>) {
-    const updatedType = await this.prisma.type.update({
+  updateType(id: number, payload: UpdateTypeDto) {
+    return this.prisma.type.update({
       where: { id },
       data: { typeName: payload.typeName },
     });
-    return updatedType;
   }
 
-  async deleteType(id: number) {
-    const deletedType = await this.prisma.type.delete({ where: { id } });
-    return deletedType;
+  deleteType(id: number) {
+    return this.prisma.type.delete({ where: { id } });
   }
 }

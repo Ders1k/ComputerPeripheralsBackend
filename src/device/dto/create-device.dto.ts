@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
 
 export class CreateDeviceDto {
   @IsNotEmpty()
@@ -11,8 +11,12 @@ export class CreateDeviceDto {
   img: string;
 
   @IsNotEmpty()
+  @IsInt()
+  @IsPositive()
   brandId: number;
-  
+
   @IsNotEmpty()
+  @IsInt()
+  @IsPositive()
   typeId: number;
 }

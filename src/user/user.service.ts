@@ -7,14 +7,12 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUserById(id: number) {
-    const userById = await this.prisma.user.findUnique({ where: { id } });
-    return userById;
+  getUserById(id: number) {
+    return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async getUserByEmail(email: string) {
-    const userByEmail = await this.prisma.user.findUnique({ where: { email } });
-    return userByEmail;
+  getUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
   async createUser(payload: CreateUserDto) {
@@ -30,8 +28,8 @@ export class UserService {
     return newUser;
   }
 
-  async updateUser(id: number, payload: Partial<UpdateUserDto>) {
-    const updatedUser = await this.prisma.user.update({
+  updateUser(id: number, payload: UpdateUserDto) {
+    return this.prisma.user.update({
       where: { id },
       data: {
         name: payload.name,
@@ -40,11 +38,9 @@ export class UserService {
         email: payload.email,
       },
     });
-    return updatedUser;
   }
 
-  async deleteUser(id: number) {
-    const deletedUser = await this.prisma.user.delete({ where: { id } });
-    return deletedUser;
+  deleteUser(id: number) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }

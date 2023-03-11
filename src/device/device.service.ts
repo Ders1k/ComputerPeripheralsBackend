@@ -1,23 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateDeviceDto, UpdateDeviceDto } from './dto';
+import {
+  CreateDeviceDto,
+  CreateDeviceInfoDto,
+  UpdateDeviceDto,
+  UpdateDeviceInfoDto,
+} from './dto';
 
 @Injectable()
 export class DeviceService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllDevices() {
-    const devices = await this.prisma.device.findMany();
-    return devices;
+  getAllDevices() {
+    return this.prisma.device.findMany();
   }
 
-  async getOneDevice(id: number) {
-    const device = await this.prisma.device.findUnique({ where: { id } });
-    return device;
+  getOneDevice(id: number) {
+    return this.prisma.device.findUnique({ where: { id } });
   }
 
-  async createDevice(payload: CreateDeviceDto) {
-    const newDevice = await this.prisma.device.create({
+  getDeviceInfoById(id: number) {
+    return this.prisma.deviceInfo.findUnique({
+      where: { id },
+    });
+  }
+
+  getDevicesInfoByDeviceId(deviceId: number) {
+    return this.prisma.deviceInfo.findMany({ where: { deviceId } });
+  }
+
+  createDevice(payload: CreateDeviceDto) {
+    return this.prisma.device.create({
       data: {
         name: payload.name,
         price: payload.price,
@@ -26,11 +39,16 @@ export class DeviceService {
         brandId: payload.brandId,
       },
     });
-    return newDevice;
   }
 
-  async updateDevice(id: number, payload: Partial<UpdateDeviceDto>) {
-    const updatedDevice = await this.prisma.device.update({
+  createDeviceInfo(payload: CreateDeviceInfoDto) {
+    return this.prisma.deviceInfo.create({
+      data: { info: payload.info, deviceId: payload.deviceId },
+    });
+  }
+
+  updateDevice(id: number, payload: UpdateDeviceDto) {
+    return this.prisma.device.update({
       where: { id },
       data: {
         name: payload.name,
@@ -40,11 +58,20 @@ export class DeviceService {
         brandId: payload.brandId,
       },
     });
-    return updatedDevice;
   }
 
-  async deleteDevice(id: number) {
-    const deletedDevice = await this.prisma.device.delete({ where: { id } });
-    return deletedDevice;
+  updateDeviceInfo(id: number, payload: UpdateDeviceInfoDto) {
+    return this.prisma.deviceInfo.update({
+      where: { id },
+      data: { info: payload.info },
+    });
+  }
+
+  deleteDevice(id: number) {
+    return this.prisma.device.delete({ where: { id } });
+  }
+
+  deleteDeviceInfo(id: number) {
+    return this.prisma.deviceInfo.delete({ where: { id } });
   }
 }

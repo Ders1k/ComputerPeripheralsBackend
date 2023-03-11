@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateBrandDto {
+export class UpdateDeviceInfoDto {
   @IsNotEmpty()
   @IsString()
-  brandName: string;
+  info: string;
 }

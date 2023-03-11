@@ -6,33 +6,28 @@ import { CreateBrandDto, UpdateBrandDto } from './dto';
 export class BrandService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAllBrands() {
-    const brands = await this.prisma.brand.findMany();
-    return brands;
+  getAllBrands() {
+    return this.prisma.brand.findMany();
   }
 
-  async getBrandById(id: number) {
-    const brand = await this.prisma.brand.findUnique({ where: { id } });
-    return brand;
+  getBrandById(id: number) {
+    return this.prisma.brand.findUnique({ where: { id } });
   }
 
-  async createBrand(payload: CreateBrandDto) {
-    const newBrand = await this.prisma.brand.create({
+  createBrand(payload: CreateBrandDto) {
+    return this.prisma.brand.create({
       data: { brandName: payload.brandName },
     });
-    return newBrand;
   }
 
-  async updateBrand(id: number, payload: Partial<UpdateBrandDto>) {
-    const updatedBrand = await this.prisma.brand.update({
+  updateBrand(id: number, payload: UpdateBrandDto) {
+    return this.prisma.brand.update({
       where: { id },
       data: { brandName: payload.brandName },
     });
-    return updatedBrand;
   }
 
-  async deleteBrand(id: number) {
-    const deletedBrand = await this.prisma.brand.delete({ where: { id } });
-    return deletedBrand;
+  deleteBrand(id: number) {
+    return this.prisma.brand.delete({ where: { id } });
   }
 }

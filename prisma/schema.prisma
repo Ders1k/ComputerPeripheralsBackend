@@ -26,12 +26,11 @@ model Device {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   img         String
-  brandId     Int           @unique
+  brandId     Int
   deviceBrand Brand         @relation(fields: [brandId], references: [id])
-  typeId      Int           @unique
+  typeId      Int
   deviceType  Type          @relation(fields: [typeId], references: [id])
-  orders      Order[]
-  orderDevice OrderDevice[]
+  orders      OrderDevice[]
   deviceInfo  DeviceInfo[]
 }
 
@@ -40,7 +39,7 @@ model Type {
   typeName  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  device    Device?
+  device    Device[]
 }
 
 model Brand {
@@ -48,25 +47,25 @@ model Brand {
   brandName String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  device    Device?
+  device    Device[]
 }
 
 model Order {
-  id          Int           @id @default(autoincrement())
-  userId      Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  user        User          @relation(fields: [userId], references: [id])
-  devices     Device[]
-  orderDevice OrderDevice[]
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  status    Status        @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id])
+  devices   OrderDevice[]
 }
 
 model OrderDevice {
   id        Int      @id @default(autoincrement())
   quantity  Int
-  deviceId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deviceId  Int
   device    Device   @relation(fields: [deviceId], references: [id])
   orderId   Int
   order     Order    @relation(fields: [orderId], references: [id])
@@ -84,4 +83,10 @@ model DeviceInfo {
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  APPROVED
+  REJECTED
+  PENDING
 }
