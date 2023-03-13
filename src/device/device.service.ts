@@ -19,6 +19,14 @@ export class DeviceService {
     return this.prisma.device.findUnique({ where: { id } });
   }
 
+  getDeviceByBrand(brandId: number) {
+    return this.prisma.device.findMany({ where: { brandId: brandId } });
+  }
+
+  getDeviceByType(typeId: number) {
+    return this.prisma.device.findMany({ where: { typeId: typeId } });
+  }
+
   getDeviceInfoById(id: number) {
     return this.prisma.deviceInfo.findUnique({
       where: { id },

@@ -35,8 +35,26 @@ export class DeviceController {
     return device;
   }
 
+  @Get('/brand/:id')
+  async getDevicesByBrand(@Param('id', ParseIntPipe) id: number) {
+    const devices = await this.deviceService.getDeviceByBrand(id);
+    if (devices.length < 1) {
+      throw new NotFoundException('Devices with this brand not found');
+    }
+    return devices;
+  }
+
+  @Get('/type/:id')
+  async getDevicesByType(@Param('id', ParseIntPipe) id: number) {
+    const devices = await this.deviceService.getDeviceByType(id);
+    if (devices.length < 1) {
+      throw new NotFoundException('Devices with this type not found');
+    }
+    return devices;
+  }
+
   @Get('/deviceInfo/:id')
-  async getAllDevicesByDeviceId(@Param('id', ParseIntPipe) id: number) {
+  async getDevicesInfoByDeviceId(@Param('id', ParseIntPipe) id: number) {
     const devicesInfo = await this.deviceService.getDevicesInfoByDeviceId(id);
     if (!devicesInfo) {
       throw new NotFoundException('No info about this device');

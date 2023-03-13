@@ -1,8 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import {
+  BadRequestException,
   ConflictException,
   UnauthorizedException,
-} from '@nestjs/common/exceptions/';
+} from '@nestjs/common/exceptions';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { signInDto, signUpDto } from './dto';
@@ -40,7 +41,10 @@ export class AuthController {
     if (candidate) {
       throw new ConflictException('User already exist');
     }
-    this.userService.createUser(payload);
+    const newUser = await this.userService.createUser(payload);
+    if (!newUser) {
+      throw new BadRequestException('Something went wrong');
+    }
     return this.authService.signUp(payload);
   }
 }
